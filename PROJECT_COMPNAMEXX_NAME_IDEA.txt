@@ -1,0 +1,64 @@
+PROJECT::DB3005
+TITLE::RPG Modeling Services (rpgmodeling.com)
+
+DESCRIPTION::
+The concept is to develop a profitable website that offers modeling services to all spectrums of the Gaming community, first to the RPG players and then to Cross-over RPG/Board Games, and finally Board Games proper.
+
+ORIGIN::
+The idea came about from a review of 4th Edition D&D rules, and how the designers had originally un-balanced certain abilites and weapons.  It occurred to me that the only way to truly understand the balance issues in a system that complex would be to actually model the system digitally so it could be simulated with modifications.
+
+Additionally, I found that when I was creating an encounter for my own adventure, I had no idea as to how powerful a given creature would be compared to the complex character states I was introducing to that encounter.  Short of modeling the encounter and simulating it, anything else would be an educated but still potentially very inaccurate guess.
+
+CREATION::
+09SEP2017
+
+BUILD_00::SCOPE::
+A website offering Character Generation service for various modeling services
+
+BUILD_01::SCOPE::
+Kickstarter to model Hack Master 5th edition Character Generation with the following stretch goals:
+1.  Add leveling services
+2.  Add customized RPG System parameters to create custom Character Generation for home brew systems
+3.  Format output to be compatible with Roll20 import APIs
+4.  Add D&D 5th Ed support
+5.  Add Pathfinder support
+6.  Add Battletech support
+
+BUILD_02::SCOPE::
+Kickstarter to model Hack Master 5th ed combat in "toe-to-toe" low fidelity with the following stretch goals:
+1.  Add 2d movement model
+2.  Add AI models
+3.  Add character strategy profiles to AI models
+4.  Add gm/creature strategy profiles to AI models
+5.  Add statistics reports
+6.  Add variable fidelity to model runs/number of runs with confidence % metrics
+7.  Add D&D 5th Ed support
+8.  Add Pathfinder support
+9.  Add Battletech support
+10. Add Encounter Balance Metrics to establish Challenge Ratings
+
+BUILD_03::SCOPE::
+Kickstarter to model Travel logistics across long distances for Hack Master 5th ed with the following stretch goals:
+1.  Add Wandering Monsters
+2.  Add Terrain effects
+3.  Add D&D 5th Ed support
+4.  Add Pathfinder support
+5.  Add Battletech support
+
+BUILD_04::SCOPE::
+Kickstarter to model hybrid RPG / Board game systems with the following stretch goals:
+1.  Support Wrath of Ashkdelon
+2.  Support Legend of Drizzt
+3.  Support Pandemic Legacy
+
+BUILD_00::STATUS::
+Not Started
+
+BUILD_01::STATUS::
+Not Started 
+
+BUILD_02::STATUS::
+Not Started 
+
+BUILD_03::STATUS::
+Not Started 	
