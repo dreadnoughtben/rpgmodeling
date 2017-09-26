@@ -1,0 +1,670 @@
+<!doctype html>
+  <head>
+    <title>{{ character['name'] }} Character Sheet</title>
+    <link rel="stylesheet" type="text/css" href="static/flask.css" />
+  </head>
+
+  <body>
+    <h1>HackMaster Character Sheet</h1>
+    <table>
+    <tr>
+      <td>Name: </td>
+      <td>{{ character.get('name','No Name') }}</td>
+      <td> | BPs:{{ character.get('BP').get('total')}}</td>
+    </tr>
+    </table>
+    <hr/>
+
+    <table>
+    <tr>
+      <td style="vertical-align:top">
+        <h3>Menu</h3>
+        <table border="2" cellpadding="3" cellspacing="3">
+	  <tr>
+	    <td style="vertical-align:top">
+	      <table>
+        	<form action="/getForms" method="POST">
+	          <div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Receive BPs')}}
+        	  <input id="BPs-menu" type="submit" name="submit" style="width:200px" value="Receive BPs"></input></div>
+		  <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Roll Abilities')}}
+        	  <input id="RollAbs-menu" type="submit" name="submit" style="width:200px" value="Roll Abilities"></input></div></tr>
+        	  <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Rearrange Abilities')}}
+		  <input id="ReAbs-menu" type="submit" name="submit" style="width:200px" value="Rearrange Abilities"></input></div></tr>
+        	  <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Choose Race')}}
+		  <input id="Race-menu" type="submit" name="submit" style="width:200px" value="Choose Race"></input></div></tr>
+        	  <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Choose Class')}}
+		  <input id="Class-menu" type="submit" name="submit" style="width:200px" value="Choose Class"></input></div></tr>
+ 	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Choose Alignment')}}
+		  <input id="Align-menu" type="submit" name="submit" style="width:200px" value="Choose Alignment"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Modify Abilities')}}
+		  <input id="ModAbs-menu" type="submit" name="submit" style="width:200px" value="Modify Abilities"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Roll HPs')}}
+		  <input id="RollHPs-menu" type="submit" name="submit" style="width:200px" value="Roll HPs"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Roll Money')}}
+		  <input id="RollMoney-menu" type="submit" name="submit" style="width:200px" value="Roll Money"></input></div></tr>
+        	  <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Particulars')}}
+		  <input id="Partic-menu" type="submit" name="submit" style="width:200px" value="Particulars"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Family')}}
+		  <input id="Family-menu" type="submit" name="submit" style="width:200px" value="Family"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Quirk Flaw Method')}}
+		  <input id="QFMeth-menu" type="submit" name="submit" style="width:200px" value="Quirk Flaw Method"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Quirks and Flaws')}}
+		  <input id="QFs-menu" type="submit" name="submit" style="width:200px" value="Quirks and Flaws"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Proficiences')}}
+		  <input id="Profs-menu" type="submit" name="submit" style="width:200px" value="Proficiences"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Specializations')}}
+		  <input id="Specs-menu" type="submit" name="submit" style="width:200px" value="Specializations"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Talents')}}
+		  <input id="Talents-menu" type="submit" name="submit" style="width:200px" value="Talents"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Skills')}}
+		  <input id="Skills-menu" type="submit" name="submit" style="width:200px" value="Skills"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Equipment')}}
+		  <input id="Equip-menu" type="submit" name="submit" style="width:200px" value="Equipment"></input></div></tr>
+	          <tr><div style="text-align:left">{{ character.get('inputs', {}).get('status', {}).get('Powers')}}
+		  <input id="Powers-menu" type="submit" name="submit" style="width:200px" value="Powers"></input></div></tr>
+	          <tr><div style="text-align:left">[_]
+		  <input id="done-menu" type="submit" name="submit" style="width:200px" value="Done"></input></div></tr>
+	          <tr><div style="text-align:left">[_]
+		  <input id="reset-menu" type="submit" name="submit" style="width:200px" value="Reset"></input></div></tr>
+                </form>
+              </table>
+            </td>
+            <td style="text-align:left; vertical-align:top">
+              <table>
+		<div>
+		  {% if character.get('inputs', {}).get('state', {}) == 'Receive BPs' %}
+		    <form action="/getInputs" method="POST">
+		      Enter Starting BPs: <br>
+		      <input type="text" name="startbps" value=40 size="20">
+
+		  {% elif character.get('inputs', {}).get('state', {}) == 'Roll Abilities' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Roll Abilities (or Auto Roll):</table></td></tr>
+		      <tr>
+			<td>
+			  <table>
+			  <tr><td>STR:</td><td>
+                <input type="text" name="strengthBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('strength')}} size="20"></td>
+			  <td>
+              <input type="text" name="strengthPct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('strength')}} size="20"></td></tr>
+			  <tr><td>INT:</td><td>
+                <input type="text" name="intelligenceBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('intelligence')}} size="20"></td> 
+			  <td>
+              <input type="text" name="intelligencePct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('intelligence')}} size="20"></td></tr>
+			  <tr><td>WIS:</td><td>
+                <input type="text" name="wisdomBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('wisdom')}} size="20"></td> 
+			  <td>
+              <input type="text" name="wisdomPct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('wisdom')}} size="20"></td></tr>
+			  <tr><td>DEX:</td><td>
+                <input type="text" name="dexterityBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('dexterity')}} size="20"></td> 
+			  <td>
+              <input type="text" name="dexterityPct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('dexterity')}} size="20"></td></tr>
+			  <tr><td>CON:</td><td>
+                <input type="text" name="constitutionBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('constitution')}} size="20"></td> 
+			  <td>
+              <input type="text" name="constitutionPct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('constitution')}} size="20"></td></tr>
+			  <tr><td>LKS:</td><td>
+                <input type="text" name="looksBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('looks')}} size="20"></td> 
+			  <td>
+              <input type="text" name="looksPct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('looks')}} size="20"></td></tr>
+			  <tr><td>CHA:</td><td>
+                <input type="text" name="charismaBase" style="width:20px" value={{character.get('inputs',{}).get('rawRollsBase', {}).get('charisma')}} size="20"></td> 
+			  <td>
+              <input type="text" name="charismaPct" style="width:30px" value={{character.get('inputs',{}).get('rawRollsPct', {}).get('charisma')}} size="20"></td></tr>
+			  </table>
+			</td>
+		      </tr>
+		      <tr><td><input id="autoroll-stats" type="submit" name="submit" style="width:200px" value="Auto Roll"></td></tr>
+
+		  {% elif character.get('inputs', {}).get('state', {}) == 'Rearrange Abilities' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Select Abilities to Swap:</table></td></tr>
+		      <tr>
+		        <td>
+			  <table>
+			    <tr><td></td><td></td><td></td><td></td><td>From:</td><td>To:</td></tr>
+			    <tr><td>STR:</td><td>{{character.get('finalScoresBase', {}).get('strength')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('strength')}}</td>
+				<td><input type="radio" name="swap1" value="strength" checked="checked"></td><td><input type="radio" name="swap2" value="strength" checked="checked"></td>
+			    <tr><td>INT:</td><td>{{character.get('finalScoresBase', {}).get('intelligence')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('intelligence')}}</td>
+				<td><input type="radio" name="swap1" value="intelligence"></td><td><input type="radio" name="swap2" value="intelligence"></td>
+			    <tr><td>WIS:</td><td>{{character.get('finalScoresBase', {}).get('wisdom')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('wisdom')}}</td>
+				<td><input type="radio" name="swap1" value="wisdom"></td><td><input type="radio" name="swap2" value="wisdom"></td>
+			    <tr><td>DEX:</td><td>{{character.get('finalScoresBase', {}).get('dexterity')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('dexterity')}}</td>
+				<td><input type="radio" name="swap1" value="dexterity"></td><td><input type="radio" name="swap2" value="dexterity"></td>
+			    <tr><td>CON:</td><td>{{character.get('finalScoresBase', {}).get('constitution')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('constitution')}}</td>
+				<td><input type="radio" name="swap1" value="constitution"></td><td><input type="radio" name="swap2" value="constitution"></td>
+			    <tr><td>LKS:</td><td>{{character.get('finalScoresBase', {}).get('looks')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('looks')}}</td>
+				<td><input type="radio" name="swap1" value="looks"></td><td><input type="radio" name="swap2" value="looks"></td>
+			    <tr><td>CHA:</td><td>{{character.get('finalScoresBase', {}).get('charisma')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('charisma')}}</td>
+				<td><input type="radio" name="swap1" value="charisma" checked="checked"></td><td><input type="radio" name="swap2" value="charisma" checked="checked"></td>					
+			    		
+			  </table>
+			</td>
+		      </tr>
+                  
+		  {% elif character.get('inputs', {}).get('state', {}) == 'Choose Race' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Select Race:</table></td></tr>
+		      <tr><td><select name="Race">
+                                <option value="human">Human</option>
+                                <option value="dwarf">Dwarf</option>
+                                <option value="elf">Elf</option>
+                                <option value="halfling">Halfling</option>
+				<option value="halfElfElf">Half-Elf (Elf Reared)</option>
+				<option value="halfElfHuman">Half-Elf (Human Reared)</option>
+				<option value="gnome">Gnome</option>
+				<option value="gnomeTitan">Gnome Titan</option>
+				<option value="grel">Grel</option>
+				<option value="halfHobgoblinHuman">Half-Hobgoblin (Human Reared)</option>
+				<option value="halfHobgoblinHobgoblin">Half-Hobgoblin (Hobgoblin Reared)</option>
+				<option value="halfOrc">Half-Orc</option>
+				<option value="pixieFairie">Pixie Fairie</option>
+				<option value="none">None</option>
+		              </select></td></tr>
+
+	          {% elif character.get('inputs', {}).get('state', {}) == 'Choose Class' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Select Class:</table></td></tr>
+		      <tr><td><select name="Class">
+                                <option value="fighter">Fighter</option>
+                                <option value="knight">Knight</option>
+                                <option value="paladin">Paladin</option>
+                                <option value="ranger">Ranger</option>
+				<option value="barbarian">Barbarian</option>
+				<option value="thief">Thief</option>
+				<option value="rogue">Rogue</option>
+				<option value="assassin">Assassin</option>
+				<option value="mage">Mage</option>
+				<option value="fighterMage">Fighter-Mage</option>
+				<option value="fighterThief">Fighter-Thief</option>
+				<option value="mageThief">Mage-Thief</option>
+				<option value="cleric">Cleric</option>
+				<option value="none">None</option>
+		              </select></td></tr>
+
+		  {% elif character.get('inputs', {}).get('state', {}) == 'Choose Alignment' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Select Alignment:</table></td></tr>
+		      <tr><td><select name="Alignment">
+                                <option value="lawfulGood">lawfulGood</option>
+                                <option value="lawfulNeutral">lawfulNeutral</option>
+                                <option value="lawfulEvil">lawfulEvil</option>
+                                <option value="neutralGood">neutralGood</option>
+				<option value="trueNeutral">trueNeutral</option>
+				<option value="neutralEvil">neutralEvil</option>
+				<option value="chaoticGood">chaoticGood</option>
+				<option value="chaoticNeutral">chaoticNeutral</option>
+		              </select></td></tr>
+
+		  {% elif character.get('inputs', {}).get('state', {}) == 'Modify Abilities' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Add BPs to Abilities:</table></td></tr>
+		      <tr>
+		        <td>
+			  <table>
+			    <tr><td></td><td></td><td></td><td></td><td>BPs:</td></tr>
+			    <tr><td>STR:</td><td>{{character.get('finalScoresBase', {}).get('strength')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('strength')}}</td>
+				<td>
+                <input type="text" name="strength" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('strength', {})}} size="20"></input></td>
+				<td><button id="strength+" type="submit" name="submit" value="strength+">+</button></td>
+				<td><button id="strength-" type="submit" name="submit" value="strength-">-</button></td>
+			    <tr><td>INT:</td><td>{{character.get('finalScoresBase', {}).get('intelligence')}}</td>
+                                <td>/</td><td>{{character.get('finalScoresPct', {}).get('intelligence')}}</td>
+				<td>
+                <input type=text name="intelligence" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('intelligence', {})}} size="20"></td>
+				<td><button id="intelligence+" type="submit" name="submit" value="intelligence+">+</button></td>
+				<td><button id="intelligence-" type="submit" name="submit" value="intelligence-">-</button></td>
+			    <tr><td>WIS:</td><td>{{character.get('finalScoresBase', {}).get('wisdom')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('wisdom')}}</td>
+				<td>
+                <input type="text" name="wisdom" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('wisdom', {})}} size="20"></td>
+				<td><button id="wisdom+" type="submit" name="submit" value="wisdom+">+</button></td>
+				<td><button id="wisdom-" type="submit" name="submit" value="wisdom-">-</button></td>
+			    <tr><td>DEX:</td><td>{{character.get('finalScoresBase', {}).get('dexterity')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('dexterity')}}</td>
+				<td>
+                <input type="text" name="dexterity" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('dexterity', {})}} size="20"></td>
+				<td><button id="dexterity+" type="submit" name="submit" value="dexterity+">+</button></td>
+				<td><button id="dexterity-" type="submit" name="submit" value="dexterity-">-</button></td>
+			    <tr><td>CON:</td><td>{{character.get('finalScoresBase', {}).get('constitution')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('constitution')}}</td>
+				<td>
+                <input type="text" name="constitution" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('constitution', {})}} size="20"></td>
+				<td><button id="constitution+" type="submit" name="submit" value="constitution+">+</button></td>
+				<td><button id="constitution-" type="submit" name="submit" value="constitution-">-</button></td>
+			    <tr><td>LKS:</td><td>{{character.get('finalScoresBase', {}).get('looks')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('looks')}}</td>
+				<td>
+                <input type="text" name="looks" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('looks', {})}} size="20"></td>
+				<td><button id="looks+" type="submit" name="submit" value="looks+">+</button></td>
+				<td><button id="looks-" type="submit" name="submit" value="looks-">-</button></td>
+			    <tr><td>CHA:</td><td>{{character.get('finalScoresBase', {}).get('charisma')}}</td>
+				<td>/</td><td>{{character.get('finalScoresPct', {}).get('charisma')}}</td>
+				<td>
+                <input type="text" name="charisma" style="width:30px" value={{character.get('inputs', {}).get('abilityBP', {}).get('charisma', {})}} size="20"></td>
+				<td><button id="charisma+" type="submit" name="submit" value="charisma+">+</button></td>
+				<td><button id="charisma-" type="submit" name="submit" value="charisma-">-</button></td>					
+			    		
+			  </table>
+			</td>
+		      </tr>
+		      <tr><td><button id="reset" type="submit" name="submit" style="width:200px" value="reset">Reset BPs</button></td></tr>
+		  
+                {% elif character.get('inputs', {}).get('state', {}) == 'Roll HPs' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Roll HPs:</table></td></tr>
+		      <tr><td>
+                <input type="text" name="HPs" style="width:40px" value={{character.get('inputs', {}).get('HPs', {})}} size="20"></input>
+		        <button id="autoroll" type="submit" name="submit" style="width:50px" value="autoroll">{{character['hitDice']}}</button></td></tr>
+                {% elif character.get('inputs', {}).get('state', {}) == 'Roll Money' %}
+		    <form action="/getInputs" method="POST">
+		      <tr><td><table>Roll Silver:</table></td></tr>
+		      <tr><td>
+                <input type="text" name="silver" style="width:40px" value={{character.get('inputs', {}).get('silver', {})}} size="20"></input>
+		        <button id="autoroll" type="submit" name="submit" style="width:70px" value="autoroll">35+2d12p</button></td></tr>		      
+
+                {% elif character.get('inputs', {}).get('state', {}) == 'Particulars' %}
+		  <form action="/getInputs" method="POST">
+		    <tr><td><table>
+		      <tr><td>Select Gender:</td><td><select name="gender">
+		                                     <option value="male">Male</option>
+						     <option value="female">Female</option><td></tr>
+		      <tr><td>Age:</td><td>
+                        <input type="text" name="age" style="width:40px" value={{character.get('inputs', {}).get('age', {})}} size="20"></input>
+		        <button id="ageroll" type="submit" name="submit" style="width:70px" value="ageroll">{{ character['ageDice'] }}</button></td></tr>
+
+		      <tr><td>Height:</td><td>
+                        <input type="text" name="height1" style="width:40px" value={{character.get('inputs', {}).get('heightRoll1', {})}} size="20"></input>
+		        <button id="heightroll1" type="submit" name="submit" style="width:40px" value="heightroll1">d100</button>
+			<input type="text" name="height2" style="width:40px" value={{character.get('inputs', {}).get('heightRoll2', {})}} size="20"></input>
+			<button id="heightroll2" type="submit" name="submit" style="width:70px" value="heightroll2">
+				{{ character['heightDice2'] }}</button></td></tr>
+
+                      <tr><td>BMI:</td><td>
+                        <input type="text" name="bmi1" style="width:40px" value={{character.get('inputs', {}).get('bmiRoll1', {})}} size="20"></input>
+		        <button id="bmiroll1" type="submit" name="submit" style="width:40px" value="bmiroll1">
+				{{ character['bmiDice'] }}</button>
+                        <input type="text" name="bmi2" style="width:40px" value={{character.get('inputs', {}).get('bmiRoll2', {})}} size="20"></input>
+	                <button id="bmiroll2" type="submit" name="submit" style="width:70px" value="bmiroll2">
+				{{ character['weightDice']}}</button></td></tr>
+                     
+		      <tr><td>Handedness:</td><td>
+                        <input type="text" name="hand" style="width:40px" value={{character.get('inputs', {}).get('handRoll', {})}} size="20"></input>
+		        <button id="handroll" type="submit" name="submit" style="width:40px" value="handroll">d100</button></td></tr>
+                </table></td></tr>
+		<tr><td><button id="proll" type="submit" name="submit" style="width:200px" value="proll">Autoroll Particulars</button></td></tr>
+                {% elif character.get('inputs', {}).get('state', {}) == 'Family' %}
+		  <form action="/getInputs" method="POST">
+	            <tr><td><table>
+		      <tr><td>Legitimacy:</td><td>
+                <input         type="text"   name="legit"      style="width:40px" value={{character.get('inputs', {}).get('legitRoll', {})}} size="20"></input>
+			<button id="legitroll"                   type="submit" name="submit"     style="width:40px" value="legitroll">d20</button></td></tr>
+		      <tr><td>Birth Circumstance:</td><td>
+                <input type="text"   name="birth"      style="width:40px" value={{character.get('inputs', {}).get('birthRoll', {})}} size="20"></input>
+                        <button id="birthroll"                   type="submit" name="submit"     style="width:40px" value="birthroll">d100</button></td></tr>
+	              <tr><td>Father Identity:</td><td>
+                    <input    type="text"   name="fatherid"   style="width:40px" value={{character.get('inputs', {}).get('fatherIDRoll', {})}} size="20"></input>
+		        <button id="fatheridroll"                type="submit" name="submit"     style="width:40px" value="fatheridroll">d100</button></td></tr>
+		      <tr><td>Father Status:</td><td>
+                <input      type="text"   name="fatherstat" style="width:40px" value={{character.get('inputs', {}).get('fatherStatusRoll', {})}} size="20"></input>
+			<button id="fatherstatroll"              type="submit" name="submit"     style="width:40px" value="fatherstatroll">d100</button></td></tr>
+                      <tr><td>Mother Status:</td><td>
+                        <input      type="text"   name="motherstat" style="width:40px" value={{character.get('inputs', {}).get('motherStatusRoll', {})}} size="20"></input>
+			<button id="motherstatroll"              type="submit" name="submit"     style="width:40px" value="motherstatroll">d100</button></td></tr>
+                      <tr><td>Re-marry Status:</td><td>
+                        <input    type="text"   name="remarry"    style="width:40px" value={{character.get('inputs', {}).get('remarryRoll', {})}} size="20"></input>
+			<button id="remarryroll"                 type="submit" name="submit"     style="width:40px" value="remarryroll">d100</button></td></tr>
+		      <tr><td>Father Quality:</td><td>
+                <input     type="text"   name="fatherqual" style="width:40px" value={{character.get('inputs', {}).get('fatherQualRoll', {})}} size="20"></input>
+			<button id="fatherqualroll"              type="submit" name="submit"     style="width:40px" value="fatherqualroll">d100</button></td></tr>
+		      <tr><td>Mother Quality:</td><td>
+                <input     type="text"   name="motherqual" style="width:40px" value={{character.get('inputs', {}).get('motherQualRoll', {})}} size="20"></input>
+		        <button id="motherqualroll"              type="submit" name="submit"     style="width:40px" value="motherqualroll">d100</button></td></tr>
+		      <tr><td>Siblings:</td><td>
+                <input           type="text"   name="siblings"   style="width:40px" value={{character.get('inputs', {}).get('siblingsRoll', {})}} size="20"></input>
+		        <button id="siblingsroll"                type="submit" name="submit"     style="width:40px" value="siblingsroll">d20</button></td></tr>
+
+                      
+
+		      {% if character.get('siblings', {}) > 0 %}
+                      <tr><td>Birth Order:</td><td>
+                        <input        type="text"   name="birthorder" style="width:40px" value={{character.get('inputs', {}).get('birthOrderRoll', {})}} size="20"></input>
+		        <button id="birthorderroll"              type="submit" name="submit"     style="width:40px" value="birthorderroll">d{{character.get('siblings', {}) + 1}}</button></td></tr>
+		      </table></td></tr>
+		      <tr><td><table><td>
+			<tr><td></td><td>Gender</td><td>Status</td><td>Twin/Ident.</td><td>Bond</td></tr>
+			<tr><td>Sib1:</td><td>
+              <input type="text" name="sib1gender" style="width:50px" value={{character.get('inputs', {}).get('sib1GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib1stat"   style="width:50px" value={{character.get('inputs', {}).get('sib1StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib1twin"   style="width:50px" value={{character.get('inputs', {}).get('sib1TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib1TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib1idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib1IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib1idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib1IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>
+					  <td>
+                      <input type="text" name="sib1relat"  style="width:50px" value={{character.get('inputs', {}).get('sib1RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib1genderroll" type="submit" name="submit" style="width:55px" value="sib1genderroll">d6</button></td>
+				     <td><button id="sib1statroll" type="submit" name="submit" style="width:55px" value="sib1statroll">d6</button></td>
+				     <td><button id="sib1twinroll" type="submit" name="submit" style="width:55px" value="sib1twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib1TwinRoll', {}) > 98 %}
+				       <button id="sib1idtwinroll" type="submit" name="submit" style="width:25px" value="sib1idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib1idtwinroll" type="submit" name="submit" style="width:25px" value="sib1idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib1relatroll" type="submit" name="submit" style="width:50px" value="sib1relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 1 %}
+			<tr><td>Sib2:</td><td>
+              <input type="text" name="sib2gender" style="width:50px" value={{character.get('inputs', {}).get('sib2GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib2stat"   style="width:50px" value={{character.get('inputs', {}).get('sib2StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib2twin"   style="width:50px" value={{character.get('inputs', {}).get('sib2TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib2TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib2idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib2IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib2idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib2IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>
+					  <td>
+                      <input type="text" name="sib2relat"  style="width:50px" value={{character.get('inputs', {}).get('sib2RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib2genderroll" type="submit" name="submit" style="width:55px" value="sib2genderroll">d6</button></td>
+				     <td><button id="sib2statroll" type="submit" name="submit" style="width:55px" value="sib2statroll">d6</button></td>
+				     <td><button id="sib2twinroll" type="submit" name="submit" style="width:55px" value="sib2twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib2TwinRoll', {}) > 98 %}
+				       <button id="sib2idtwinroll" type="submit" name="submit" style="width:25px" value="sib2idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib2idtwinroll" type="submit" name="submit" style="width:25px" value="sib2idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib2relatroll" type="submit" name="submit" style="width:50px" value="sib2relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 2 %}
+
+			<tr><td>Sib3:</td><td>
+              <input type="text" name="sib3gender" style="width:50px" value={{character.get('inputs', {}).get('sib3GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib3stat"   style="width:50px" value={{character.get('inputs', {}).get('sib3StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib3twin"   style="width:50px" value={{character.get('inputs', {}).get('sib3TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib3TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib3idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib3IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib3idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib3IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>
+					  <td>
+                      <input type="text" name="sib3relat"  style="width:50px" value={{character.get('inputs', {}).get('sib3RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib3genderroll" type="submit" name="submit" style="width:55px" value="sib3genderroll">d6</button></td>
+				     <td><button id="sib3statroll" type="submit" name="submit" style="width:55px" value="sib3statroll">d6</button></td>
+				     <td><button id="sib3twinroll" type="submit" name="submit" style="width:55px" value="sib3twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib3TwinRoll', {}) > 98 %}
+				       <button id="sib3idtwinroll" type="submit" name="submit" style="width:25px" value="sib3idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib3idtwinroll" type="submit" name="submit" style="width:25px" value="sib3idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib3relatroll" type="submit" name="submit" style="width:50px" value="sib3relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 3 %}
+
+			<tr><td>Sib4:</td><td>
+              <input type="text" name="sib4gender" style="width:50px" value={{character.get('inputs', {}).get('sib4GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib4stat"   style="width:50px" value={{character.get('inputs', {}).get('sib4StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib4twin"   style="width:50px" value={{character.get('inputs', {}).get('sib4TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib4TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib4idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib4IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib4idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib4IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>				  
+					  <td>
+                      <input type="text" name="sib4relat"  style="width:50px" value={{character.get('inputs', {}).get('sib4RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib4genderroll" type="submit" name="submit" style="width:55px" value="sib4genderroll">d6</button></td>
+				     <td><button id="sib4statroll" type="submit" name="submit" style="width:55px" value="sib4statroll">d6</button></td>
+				     <td><button id="sib4twinroll" type="submit" name="submit" style="width:55px" value="sib4twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib4TwinRoll', {}) > 98 %}
+				       <button id="sib4idtwinroll" type="submit" name="submit" style="width:25px" value="sib4idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib4idtwinroll" type="submit" name="submit" style="width:25px" value="sib4idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib4relatroll" type="submit" name="submit" style="width:50px" value="sib4relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 4 %}
+
+			<tr><td>Sib5:</td><td>
+              <input type="text" name="sib5gender" style="width:50px" value={{character.get('inputs', {}).get('sib5GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib5stat"   style="width:50px" value={{character.get('inputs', {}).get('sib5StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib5twin"   style="width:50px" value={{character.get('inputs', {}).get('sib5TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib5TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib5idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib5IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib5idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib5IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>			  
+					  <td>
+                      <input type="text" name="sib5relat"  style="width:50px" value={{character.get('inputs', {}).get('sib5RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib5genderroll" type="submit" name="submit" style="width:55px" value="sib5genderroll">d6</button></td>
+				     <td><button id="sib5statroll" type="submit" name="submit" style="width:55px" value="sib5statroll">d6</button></td>
+				     <td><button id="sib5twinroll" type="submit" name="submit" style="width:55px" value="sib5twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib5TwinRoll', {}) > 98 %}
+				       <button id="sib5idtwinroll" type="submit" name="submit" style="width:25px" value="sib5idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib5idtwinroll" type="submit" name="submit" style="width:25px" value="sib5idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib5relatroll" type="submit" name="submit" style="width:50px" value="sib5relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 5 %}
+
+			<tr><td>Sib6:</td><td>
+              <input type="text" name="sib6gender" style="width:50px" value={{character.get('inputs', {}).get('sib6GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib6stat"   style="width:50px" value={{character.get('inputs', {}).get('sib6StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib6twin"   style="width:50px" value={{character.get('inputs', {}).get('sib6TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib6TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib6idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib6IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib6idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib6IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>
+					  <td>
+                      <input type="text" name="sib6relat"  style="width:50px" value={{character.get('inputs', {}).get('sib6RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib6genderroll" type="submit" name="submit" style="width:55px" value="sib6genderroll">d6</button></td>
+				     <td><button id="sib6statroll" type="submit" name="submit" style="width:55px" value="sib6statroll">d6</button></td>
+				     <td><button id="sib6twinroll" type="submit" name="submit" style="width:55px" value="sib6twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib6TwinRoll', {}) > 98 %}
+				       <button id="sib6idtwinroll" type="submit" name="submit" style="width:25px" value="sib6idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib6idtwinroll" type="submit" name="submit" style="width:25px" value="sib6idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib6relatroll" type="submit" name="submit" style="width:50px" value="sib6relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 6 %}
+
+			<tr><td>Sib7:</td><td>
+              <input type="text" name="sib7gender" style="width:50px" value={{character.get('inputs', {}).get('sib7GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib7stat"   style="width:50px" value={{character.get('inputs', {}).get('sib7StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib7twin"   style="width:50px" value={{character.get('inputs', {}).get('sib7TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib7TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib7idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib7IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib7idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib7IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>
+					  <td>
+                      <input type="text" name="sib7relat"  style="width:50px" value={{character.get('inputs', {}).get('sib7RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib7genderroll" type="submit" name="submit" style="width:55px" value="sib7genderroll">d6</button></td>
+				     <td><button id="sib7statroll" type="submit" name="submit" style="width:55px" value="sib7statroll">d6</button></td>
+				     <td><button id="sib7twinroll" type="submit" name="submit" style="width:55px" value="sib7twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib7TwinRoll', {}) > 98 %}
+				       <button id="sib7idtwinroll" type="submit" name="submit" style="width:25px" value="sib7idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib7idtwinroll" type="submit" name="submit" style="width:25px" value="sib7idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib7relatroll" type="submit" name="submit" style="width:50px" value="sib7relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 7 %}
+
+			<tr><td>Sib8:</td><td>
+              <input type="text" name="sib8gender" style="width:50px" value={{character.get('inputs', {}).get('sib8GenderRoll', {})}} size="20"></input></td>
+                                          <td>
+                                          <input type="text" name="sib8stat"   style="width:50px" value={{character.get('inputs', {}).get('sib8StatRoll', {})}} size="20"></input></td>
+					  <td>
+                      <input type="text" name="sib8twin"   style="width:50px" value={{character.get('inputs', {}).get('sib8TwinRoll', {})}} size="20"></input>
+					    {% if character.get('inputs', {}).get('sib8TwinRoll', {}) > 98 %}
+					    <input type="text" name="sib8idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib8IDTwinRoll', {})}} size="20"></input>
+					    {% else %}
+					    <input type="text" name="sib8idtwin"   style="width:20px" value={{character.get('inputs', {}).get('sib8IDTwinRoll', {})}} disabled size="20"></input>
+					    {% endif %}</td>
+					  <td>
+                      <input type="text" name="sib8relat"  style="width:50px" value={{character.get('inputs', {}).get('sib8RelatRoll', {})}} size="20"></input></td></tr>
+
+			<tr><td></td><td><button id="sib8genderroll" type="submit" name="submit" style="width:55px" value="sib8genderroll">d6</button></td>
+				     <td><button id="sib8statroll" type="submit" name="submit" style="width:55px" value="sib8statroll">d6</button></td>
+				     <td><button id="sib8twinroll" type="submit" name="submit" style="width:55px" value="sib8twinroll">d100</button>
+				       {% if character.get('inputs', {}).get('sib8TwinRoll', {}) > 98 %}
+				       <button id="sib8idtwinroll" type="submit" name="submit" style="width:25px" value="sib8idtwinroll">d8</button>
+				       {% else %}
+				       <button id="sib8idtwinroll" type="submit" name="submit" style="width:25px" value="sib8idtwinroll" disabled>d8</button>
+				       {% endif %}</td>
+				     <td><button id="sib8relatroll" type="submit" name="submit" style="width:50px" value="sib8relatroll">d12</button></td></tr>
+			{% endif %}
+			{% if character.get('siblings', {}) > 0 %}
+                          </td>
+                        {% endif %}
+
+			</table></td></tr>
+
+		    <tr><td><button id="autoroll" type="submit" name="submit" style="width:200px" value="autoroll">Autoroll Family</button></td></tr>	
+                {% elif character.get('inputs', {}).get('state', {}) == 'Quirk Flaw Method' %}
+		  <form action="/getInputs" method="POST">
+			  <tr><td>{% if character['inputs']['quirkFlawMethod']=='pick' %}Method: Cherry Pick{%else%}Method:  Random{%endif%}</td></tr>
+ 			  <tr><td>Random<input type="radio" name="qfmethod" value="random" checked></input></td></tr>
+			  <tr><td>Cherry Pick<input type="radio" name="qfmethod" value="cherrypick"></input></td></tr>
+
+
+                {% elif character.get('inputs', {}).get('state', {}) == 'Quirks and Flaws' %}
+		  <form action="/getInputs" method="POST">
+                    {% if character['inputs']['quirkFlawMethod']=='random' %}
+		      <tr><td>Roll Quirk/Flaw: 
+	              <input type="text" name="quirkflaw" style="width:30px" value={{character['inputs']['quirkFlawRoll']}} size="20"></input>
+	              <button id="quirkflawroll" type="submit" name="submit" style="width:55px" value="quirkflawroll">d1000</button></td></tr>
+		      <tr><td>{{character['inputs']['RolledQuirkFlaw']}}</td></tr>
+		      {% if character['inputs']['rolledQuirkFlaw'] == 'abstinent' %}
+		      <tr><td>Abstinent</td></tr>
+		      {% endif %}
+
+		    {% endif %}
+
+                {% endif %}
+		</div>
+		<div>
+		  <tr>
+	            <td>
+		      <input id="submit-inputs" type="submit" name="submit" style="width:200px" value="Enter">
+		      </form>
+		    </td>
+		  </tr>
+		</div>
+    	      </table>
+	    </td>
+	  </tr>
+	</table>
+
+      </td>
+      <td style="vertical-align:top">
+        <h3>Character Summary</h3>
+        <table border="2" cellpadding="3" cellspacing="3">
+          <td>
+    	    <table>
+              <tr><td>STR: </td><td>{{ character.get('finalScoresBase', {}).get('strength')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('strength')}}</td></tr>
+    	      <tr><td>INT: </td><td>{{ character.get('finalScoresBase', {}).get('intelligence')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('intelligence')}}</td></tr>
+    	      <tr><td>WIS: </td><td>{{ character.get('finalScoresBase', {}).get('wisdom')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('wisdom')}}</td></tr>
+    	      <tr><td>DEX: </td><td>{{ character.get('finalScoresBase', {}).get('dexterity')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('dexterity')}}</td></tr>
+	      <tr><td>CON: </td><td>{{ character.get('finalScoresBase', {}).get('constitution')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('constitution')}}</td></tr>
+    	      <tr><td>LKS: </td><td>{{ character.get('finalScoresBase', {}).get('looks')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('looks')}}</td></tr>
+    	      <tr><td>CHA: </td><td>{{ character.get('finalScoresBase', {}).get('charisma')}}</td>
+		  <td>/</td><td>{{ character.get('finalScoresPct', {}).get('charisma')}}</td></tr>
+    	      <tr><td>HONOR: </td><td>{{ character.get('honor')}}</td></tr>
+	      <tr><td>FAME: </td><td>{{ character.get('fame')}}</td></tr>
+    	    </table>
+          </td>
+          <td style="text-align:left; vertical-align:top">
+    	    <table>
+    	      <tr><td>race/class: </td>
+		  <td>{{ character.get('race','none') }}/{{ character.get('class','none') }}</td></tr>
+    	      <tr><td>Alignment: </td>
+		  <td>{{ character.get('alignment','none') }}</td></tr>
+    	      <tr><td>Hit Points: </td>
+      		  <td>{{ character.get('HPs','none') }}</td></tr>
+    	      <tr><td>Encumberance: </td>
+      		  <td>{{ character.get('carry','none') }}</td></tr>
+    	      <tr><td>Silver: </td>
+      		  <td>{{ character.get('silver','none') }}</td></tr>
+    	      <tr><td>Gender: </td>
+      		  <td>{{ character.get('gender','none') }}</td></tr>
+    	      <tr><td>Handedness: </td>
+      		  <td>{{ character.get('handedness','none') }}</td></tr>
+	      <tr><td>Age/Weight/Height: </td>
+		      <td>{{ character.get('age','none') }}yrs/{{ character.get('weight','none') }}lbs/{{ character.get('height','none') }}in</td></tr>
+    	    </table>
+          </td>
+	  <tr>
+            <td colspan="2">
+              <table><form action="/displayChar" method="POST">
+		<tr><td>FAMILY</td><td colspan="4"><button id="showfam" type="submit" name="submit" style="width:200px" value="showfam">Show/Hide</button></td></tr>
+		{% if character.get('inputs',{}).get('showFamily',{}) != 'yes' %}
+		  <tr><td>Heritage: </td>
+			  <td colspan="3">{{ character.get('birthCircumstance','none') }} / {% if character.get('orphan','none')=='yes' %}Orphan{% else %}Not Orphan{% endif %}</td></tr>
+	          <tr><td>Father:</td><td colspan="3">{{ character.get('fatherQuality','none') }}</td></tr>
+  	          <tr><td>Mother:</td><td colspan="3">{{ character.get('motherQuality','none') }}</td></tr>
+		  {% if character.get('siblings','none') > 0 %}<tr><td></td><td>Gender</td><td>|Twin</td><td>|Bond</td></tr>{% endif %}
+		  {% for i in range(character.get('siblings', {})) %}
+		  <tr><td>Sib {{i+1}}:</td><td>{{character.get('sib'+(i+1)|string+'Gender')}}</td><td>|{{character.get('sib'+(i+1)|string+'Twin')}}</td><td>|{{character.get('sib'+(i+1)|string+'Relat')}} </td></tr>
+		  {% endfor %}
+	        {% endif %}
+
+              </form></table>
+	    </td>
+          <tr><td colspan="2">QUIRKS/FLAWS</td></tr>
+          <tr><td colspan="2">PROFICIENCIES</td></tr>
+          <tr><td colspan="2">SPECIALIZATIONS</td></tr>
+          <tr><td colspan="2">TALENTS</td></tr>
+          <tr><td colspan="2">SKILLS</td></tr>
+          <tr><td colspan="2">EQUIPMENT</td></tr>
+          <tr><td colspan="2">ARMOR</td></tr>
+          <tr><td colspan="2">WEAPONS</td></tr>
+        </table>
+      </td>
+    </tr>
+    </table>
+    
+<hr/>
+    <h2>raw character data</h2>
+    <pre>      {{ char_str }}
+    </pre>
+  </body>
+</html>
